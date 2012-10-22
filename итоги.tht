@@ -1,0 +1,128 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<!--
+  WWWTool - "What? Where? When?" Tool -
+  Инструмент для проведения игр рода "Что? Где? Когда?"
+    (скрипт итогов года - сумма результатов игр)
+  Copyright (C) 2004-2006, Тамаревская Анна Георгиевна и Тамаревский Алексей
+
+  This file is free software, and not subject to GNU Public License
+  restrictions; you can redistribute it and/or modify it in any way
+  you see fit. This file is suitable for inclusion in a derivative
+  work, regardless of license on the work or availability of source code
+  to the work. If you redistribute this file, you must leave this
+  header intact.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+  С авторами данной программы можно связаться по адресу mirror@lyceum.nstu.ru.
+-->
+</HEAD>
+<BODY>
+<STYLE>
+  TH {
+    background-color: white
+  }
+</STYLE>
+<H2>$Заголовок$</H2>
+<P id=summ></P>
+<FORM name=options>
+<INPUT name=level type=checkbox checked onClick="main()">Показывать лигу</INPUT><BR>
+<INPUT name=colored type=checkbox checked onClick="main()">Раскрашивать первых</INPUT><BR>
+</FORM>
+<SCRIPT>
+<!--
+  var Totals = new Array($Итоги$);
+  var ColCount = $ColCount$;
+  var RowCount = $RowCount$;
+
+  var order = new Array(RowCount);
+  for (i=0; i < RowCount; i++) 
+    order[i] = i;
+
+  var First = 10;
+
+  function Cells(col, row) {
+    var S = Totals[col + row*ColCount];
+    if (S == "" || S == null || S == " ") 
+      return "&nbsp;";
+    else 
+      return S;
+  }
+
+  var Ans = new Array(RowCount);
+  var Rat = new Array(RowCount);
+
+  if (Cells(1, 0) == "Лига")
+    var UseLevel = 1;
+  else
+    var UseLevel = 0;
+
+
+  // Суммируем результаты
+  for (var i=1; i < RowCount; i++) {
+    Ans[i] = 0;
+    Rat[i] = 0;
+    for (var j=1+UseLevel; j < ColCount; j++) {
+      var S = new String(Cells(j, i));
+      Ans[i] += new Number(S.substr(0, S.indexOf("/"))).valueOf();
+      if (S.substr(S.indexOf("/") + 1) != "&nbsp;")
+        Rat[i] += new Number(S.substr(S.indexOf("/") + 1).valueOf());
+    }
+  }
+
+  // Сортируем команды
+  i = 1;
+  while (i < RowCount-1) 
+    if (Ans[order[i]] < Ans[order[i+1]] || (Ans[order[i]] == Ans[order[i+1]] && (Rat[order[i]] < Rat[order[i+1]]))) {
+      var t = order[i];
+      order[i] = order[i+1];
+      order[i+1] = t;
+      if (i > 1) i--;
+    } 
+    else 
+      i++;
+
+
+  function main() {
+
+    text = "<TABLE cellspacing=0 cellpadding=0><TR><TD bgcolor=#A0A0A0><TABLE cellspacing=1 cellpadding=3 id=tbl>";
+    text+= "<TR><TH>№ п/п</TH><TH>Место</TH><TH>Название</TH>";
+    if (!UseLevel) {
+      document.options.level.checked = 0;
+      document.options.level.disabled = 1;
+    }
+    var ShowLevel = document.options.level.checked;
+    var Colored = document.options.colored.checked;
+
+    for (var i=1 + UseLevel*(1-ShowLevel); i < ColCount; i++) text+= "<TH>"+Cells(i, 0)+"</TH>";
+
+    text+= "<TH>Итого</TH></TR>";
+    var pl = new Number(0);
+
+    for (var i=1; i < RowCount; i++) {
+      if (Ans[order[i-1]] != Ans[order[i]] || Rat[order[i-1]] != Rat[order[i]]) pl++;
+      if (!Colored || pl > First) bg = "#FFFFFF";
+                             else bg = "#DDDDFF";
+      text+= "<TR><TD bgcolor="+bg+">" + i + ".</TD><TD align=center bgcolor="+bg+">" + pl + "</TD>"+
+             "<TD align=center bgcolor="+bg+">" + Cells(0, order[i]) + "</TD>";
+      for (var j=1 + UseLevel*(1-ShowLevel); j < ColCount; j++) text+= "<TD bgcolor="+bg+" align=center>"+Cells(j, order[i])+"</TD>";
+      text+= "<TD align=center bgcolor="+bg+">" + Ans[order[i]] + "/" + Rat[order[i]] + "</TD></TR>";
+    }
+    text+="</TABLE></TD></TR></TABLE>";
+
+    document.getElementById("summ").innerHTML = text;
+  }
+
+  main();
+//-->
+</SCRIPT>
+<NoSCRIPT>Для демонстрации результатов игры необходима поддержка JavaScript со стороны браузера.<BR>Приносим свои извинения, Тамаревский Алексей, Тамаревская Анна Георгиевна<BR>
+</NoSCRIPT>
+<FONT color=#A0A0A0 size=-2>Отчет создан программой WWWTool. С пожеланиями и предложениями обращайтесь по адресу <A href='mailto:Тамаревский Алексей<mirror@lyceum.nstu.ru>?subject=WWWTool'>mirror@lyceum.nstu.ru</A>.<BR>
+Copyright &copy; 2004-2006, Тамаревская Анна Георгиевна, Тамаревский Алексей</FONT>
+</BODY>
+</HTML>

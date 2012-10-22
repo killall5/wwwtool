@@ -1,0 +1,12 @@
+Stacc222.ttf шрифт в третьей вкладке
+mainicon.ico значок программы
+WWWTool.nsi скрипт инсталляции
+HTMLCreator.pas компонент для создания отчетов
+unAddCommand.pas добавление команды
+unAddResult.pas добавление результата в итоги
+unMain.pas основное окно
+unSum.pas итоги, сумма по играм
+WWWTool.dpr *** компилировать проект
+Barcode.ttf для печати штрих-кода
+unPrintBlank.pas печать бланков ответов
+unQCost.pas стоимость ответов

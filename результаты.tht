@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<!--
+  WWWTool - "What? Where? When?" Tool - 
+  Инструмент для проведения игр рода "Что? Где? Когда?"
+    (скрипт результата игры)
+  Copyright (C) 2004-2006, Тамаревская Анна Георгиевна и Тамаревский Алексей
+
+  This file is free software, and not subject to GNU Public License
+  restrictions; you can redistribute it and/or modify it in any way
+  you see fit. This file is suitable for inclusion in a derivative
+  work, regardless of license on the work or availability of source code
+  to the work. If you redistribute this file, you must leave this
+  header intact.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+  С авторами данной программы можно связаться по адресу mirror@lyceum.nstu.ru.
+-->
+</HEAD>
+<BODY>
+<STYLE>
+  TH {
+    background-color: white
+  }
+</STYLE>
+<H2>$Заголовок$</H2>
+<P id=results></P>
+<FORM name=options>
+<INPUT name=showplace type=checkbox checked onClick="main()">Показывать место</INPUT><BR>
+<INPUT name=sorttype type=checkbox checked onClick="main()">Сортировать по месту</INPUT><BR>
+<INPUT name=level type=checkbox checked onClick="main()">Показывать лигу</INPUT><BR>
+<INPUT name=colored type=checkbox checked onClick="main()">Раскрашивать</INPUT><BR>
+</FORM>
+<SCRIPT>
+<!--
+  var Results = new Array($Результаты$);
+  var Colored = $Colored$; 
+  var ColCount = $ColCount$;
+  var RowCount = $RowCount$;
+
+  var order = new Array(RowCount);
+  for (i=0; i < RowCount; i++) 
+    order[i] = i;
+
+  var LevelExist = $Лига$; 
+  var ExtTbl = $Протокол$;
+  var QCount = ExtTbl;
+  QCount = QCount*(ExtTbl <= QCount);
+  var RasminkaExist = ($Разминка$)*(QCount > 0);
+
+
+  function Cells(col, row) {
+    var S = Results[col+row*(ColCount + ExtTbl)];
+    if (S == "" || S == null) 
+      return "&nbsp;";
+    else 
+      return S;
+  }
+
+  function bg(row) {
+    if (!Colored || !document.options.colored.checked) return "#FFFFFF";
+             else return Cells(5, row);
+  }
+
+  function SortTable(col) {
+    if (!col) 
+      for (i=0; i < RowCount; i++)
+        order[i] = i;
+    else {
+      var i = 0;
+      while (i < RowCount-1) {
+        var N1 = new Number(Cells(col, order[i]));
+        var N2 = new Number(Cells(col, order[i+1]));
+
+        if (N1.valueOf() > N2.valueOf()) {
+          var t = order[i];
+          order[i] = order[i + 1];
+          order[i+1] = t;
+          if (i) i--;
+        } 
+        else 
+          i++; 
+      }
+    }
+  }
+
+  function main() {
+    SortTable(1 - document.options.sorttype.checked);
+    if (!Colored) {
+      document.options.colored.checked = 0;
+      document.options.colored.disabled = 1;
+    }
+
+    if (!LevelExist) {
+      document.options.level.checked = 0;
+      document.options.level.disabled = 1;
+    }
+
+    showplace = document.options.showplace.checked;
+
+    text = "<TABLE cellspacing=0 cellpadding=0><TR><TD bgcolor=#A0A0A0><TABLE cellspacing=1 cellpadding=3 id=tbl>";
+    text+= "<TR><TH>№ п/п</TH><TH>Название</TH><TH>Результат</TH>";
+    if (showplace)
+      text+= "<TH>Место</TH>";
+    if (document.options.level.checked) text+= "<TH>Лига</TH>";
+    if (ExtTbl) {
+      if (RasminkaExist)
+        text+= "<TH>Разм</TH>";
+      for (var i=1; i <= QCount-RasminkaExist; i++) text+= "<TH>"+i+"</TH>"
+    }
+    text+= "</TR>";
+    for (var i=0; i < RowCount; i++) {
+
+      text+= "<TR><TD bgcolor="+bg(order[i])+">"+(i+1)+".</TD><TD bgcolor="+bg(order[i])+">"+Cells(2, order[i])+
+             "</TD><TD align=center bgcolor="+bg(order[i])+">"+Cells(3, order[i])+"</TD>";
+
+      if (showplace)
+        text +="<TD align=center bgcolor="+bg(order[i])+">"+Cells(0, order[i])+"</TD>";
+
+      if (document.options.level.checked) 
+        text+= "<TD bgcolor="+bg(order[i])+">"+Cells(4, order[i])+"</TD>";
+
+      for (var j=1; j <= QCount; j++) 
+        text+= "<TD bgcolor="+bg(order[i])+" align=center>"+Cells(3+Colored+LevelExist+j, order[i]).split(" ")[0]+"</TD>";
+
+      text+= "</TR>";
+    }
+    text+="</TABLE></TD></TR></TABLE>";
+
+    document.getElementById("results").innerHTML = text;
+  }
+
+  main();
+//-->
+</SCRIPT>
+<NoSCRIPT>Для демонстрации результатов игры необходима поддержка JavaScript со стороны браузера.<BR>Приносим свои извинения, Тамаревский Алексей, Тамаревская Анна Георгиевна<BR>
+</NoSCRIPT>
+<FONT color=#A0A0A0 size=-2>Отчет создан программой WWWTool. С пожеланиями и предложениями обращайтесь по адресу <A href='mailto:Тамаревский Алексей<mirror@lyceum.nstu.ru>?subject=WWWTool'>mirror@lyceum.nstu.ru</A>.<BR>
+Copyright &copy; 2004-2005, Тамаревская Анна Георгиевна, Тамаревский Алексей</FONT>
+</BODY>
+</HTML>

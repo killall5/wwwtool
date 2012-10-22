@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<!--
+  WWWTool - "What? Where? When?" Tool - 
+  Инструмент для проведения игр рода "Что? Где? Когда?"
+    (скрипт генерации файла R игры ОВСЧ)
+  Copyright (C) 2004-2007, Тамаревская Анна Георгиевна и Тамаревский Алексей
+
+  This file is free software, and not subject to GNU Public License
+  restrictions; you can redistribute it and/or modify it in any way
+  you see fit. This file is suitable for inclusion in a derivative
+  work, regardless of license on the work or availability of source code
+  to the work. If you redistribute this file, you must leave this
+  header intact.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+  С авторами данной программы можно связаться по адресу mirror@lyceum.nstu.ru.
+-->
+</HEAD>
+<BODY>
+<STYLE>
+  TH {
+    background-color: white
+  }
+</STYLE>
+<SCRIPT>
+<!--
+  Results = new Array($Результаты$);
+  ColCount = $ColCount$;
+  RowCount = $RowCount$;
+
+  QCount = $Протокол$;
+
+  function Cells(col, row) {
+    return Results[col+row*(ColCount + QCount)];
+  }
+
+  function main() {
+    for (i=0; i < RowCount; i++) {
+      for (raund=0; raund < QCount / 12; raund ++) {
+        sum = 0; 
+        document.write(raund + 1 + ' ');
+        tmp = Cells(1, i);
+        for(; tmp.length < 3;)
+          tmp = '0' + tmp;
+        if (!show_tables)
+          document.write(Cells(2, i));
+        else
+          document.write(code + tmp);
+        for (num = 1; num <= 12; num++) {
+          ind = 5 + 12*raund + num;
+          if ((12*raund + num < QCount) && (Cells(ind, i) == '-' || Cells(ind, i) == '')) {
+            value = '-';
+          } else {
+            value = '+';
+            sum++;
+          }
+	    
+          document.write(' ' + value);
+        }
+        document.write(' ' + sum + '\n');
+      }
+      document.write('\n');
+    }
+  }
+
+  first = prompt('Первая строка отчета', 'ОВСЧ по ЧГК');
+  tour_number = prompt('Номер тура?', '0');
+  code = prompt('код Представителя (например, RU16Z)?', '');
+  fi = prompt('Имя Фамилия Представителя?', '');
+  region = prompt('Представляемый регион?', '');
+
+  show_tables = confirm('Брать номера команд из таблицы вместо имен?');
+
+  document.write('<h1>Содержимое файла VR' + tour_number + code + '.TXT</h1><pre>');
+
+  document.write(first + '\n');
+  document.write(code + ' ' + fi + ', ' + region + '\n');
+  document.write('Тур ' + tour_number + '\n\n');
+  main();
+  document.write('</pre>');
+//-->
+</SCRIPT>
+</BODY>
+</HTML>

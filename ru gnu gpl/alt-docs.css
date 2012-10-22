@@ -1,0 +1,6 @@
+H1, H2 { color: #4d96b7 }
+EM { font-style: normal; font-weight: bold }
+TT, DT { font-weight: bold }
+DIV.note, DIV.example, DIV.tip, DIV.important,
+PRE.programlisting { background-color: #eeeeee }
+DIV.author { text-align: center }

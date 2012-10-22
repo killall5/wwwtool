@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<!--
+  WWWTool - "What? Where? When?" Tool - 
+  Инструмент для проведения игр рода "Что? Где? Когда?"
+    (скрипт результата игры)
+  Copyright (C) 2004-2006, Тамаревская Анна Георгиевна и Тамаревский Алексей
+
+  This file is free software, and not subject to GNU Public License
+  restrictions; you can redistribute it and/or modify it in any way
+  you see fit. This file is suitable for inclusion in a derivative
+  work, regardless of license on the work or availability of source code
+  to the work. If you redistribute this file, you must leave this
+  header intact.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+  С авторами данной программы можно связаться по адресу mirror@lyceum.nstu.ru.
+-->
+</HEAD>
+<BODY>
+<STYLE>
+  TD {
+    vertical-align: top;
+    background-color: white;
+    font-family: tahoma;
+    font-size: 15pt;
+    font-weight: bold;
+  }
+</STYLE>
+<!--H2>$Заголовок$</H2-->
+<P id=results></P>
+<SCRIPT>
+<!--
+  var Results = new Array($Результаты$);
+  var Colored = $Colored$; 
+  var ColCount = $ColCount$;
+  var RowCount = $RowCount$;
+
+  var order = new Array(RowCount);
+  for (i=0; i < RowCount; i++) 
+    order[i] = i;
+
+  var LevelExist = $Лига$; 
+  var ExtTbl = $Протокол$;
+  var QCount = ExtTbl;
+  QCount = QCount*(ExtTbl <= QCount);
+  var RasminkaExist = ($Разминка$)*(QCount > 0);
+
+
+  function Cells(col, row) {
+    var S = Results[col+row*(ColCount + ExtTbl)];
+    if (S == "" || S == null) 
+      return "&nbsp;";
+    else 
+      return S;
+  }
+
+
+  function SortTable(col) {
+    if (!col) 
+      for (i=0; i < RowCount; i++)
+        order[i] = i;
+    else {
+      var i = 0;
+      while (i < RowCount-1) {
+
+        if (Cells(col, order[i]) > Cells(col, order[i+1])) {
+          var t = order[i];
+          order[i] = order[i + 1];
+          order[i+1] = t;
+          if (i) i--;
+        } 
+        else 
+          i++; 
+      }
+    }
+  }
+
+  function main() {
+    SortTable(2);
+
+    text = "<TABLE width=100% cellspacing=0 cellpadding=0><TR><TD bgcolor=black><TABLE cellspacing=1 cellpadding=2 id=tbl width=100%>";
+    rows = Math.round(RowCount/2);
+    for (var i=0; i < rows; i++) {
+
+      text+= "<TR bgcolor=white>" +
+	"<TD width=13% align=center>"+Cells(3, order[i])+"</TD>" + "<TD width=35%>"+Cells(2, order[i])+"</TD>" + 
+	"<TD width=13% align=center>"+Cells(3, order[i + rows])+"</TD>" + "<TD width=35%>"+Cells(2, order[i + rows])+"</TD>" +
+	"</TR>";
+    }
+    text+="</TABLE></TD></TR></TABLE>";
+
+    document.getElementById("results").innerHTML = text;
+  }
+
+  main();
+//-->
+</SCRIPT>
+</BODY>
+</HTML>
